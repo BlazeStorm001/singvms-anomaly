@@ -52,7 +52,7 @@ def save_base64_image(base64_data, output_path):
         image_file.write(image_data)
 
 def get_response(image_path):
-    api_key = "M4k7un0DhO1ElBuNgY5i"
+    api_key = "key"
     dataset_slug = "vms-all"  # Replace with your dataset's slug
     version = 4  # Replace with your model version
     url = f"https://detect.roboflow.com/{dataset_slug}/{version}"
