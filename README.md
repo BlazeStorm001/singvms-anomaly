@@ -9,8 +9,8 @@ This project includes Python scripts for detecting traffic jams using anomaly de
 
 1. Clone the repository:
     ```sh
-    git clone {{ repository.url }}
-    cd {{ repository.name }}
+    git clone https://github.com/BlazeStorm001/singvms-anomaly.git
+    cd singvms-anomaly
     ```
 
 2. Install the required packages:
