@@ -1,19 +1,17 @@
 import cv2
 import numpy as np
-# import matplotlib.pyplot as plt
-from pdb import set_trace
 import os
+import json
+import argparse
 
-def get_poly_area(points):
-    area = 0
-    for i in range(len(points)):
-        x1, y1 = points[i]
-        x2, y2 = points[(i + 1) % len(points)]
-        area += (x1 * y2) - (x2 * y1)
-    return abs(area) / 2
 
-def segment_img(cam_id, image_path, points):
+def segment_img(output_path, image_path, points):
+    """Segment the image by applying a polygon mask."""
     image = cv2.imread(image_path)
+    if image is None:
+        print(f"Error reading image: {image_path}")
+        return
+
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert to RGB for matplotlib
 
     polygon_points = np.array(points, dtype=np.int32)
@@ -30,17 +28,32 @@ def segment_img(cam_id, image_path, points):
     # Convert back to BGR for saving
     masked_image_bgr = cv2.cvtColor(masked_image, cv2.COLOR_RGB2BGR)
     filename = image_path.split("/")[-1]
-    SAVE_DIR = f"data/{cam_id}/masked/"
-    os.makedirs(SAVE_DIR, exist_ok=True)
+    os.makedirs(output_path, exist_ok=True)
+
     # Save the masked image
-    cv2.imwrite(f'{SAVE_DIR}/{filename}', masked_image_bgr)
-
-
+    save_path = f'{output_path}/{filename}'
+    cv2.imwrite(save_path, masked_image_bgr)
+    print(f"Saved masked image to {save_path}")
 
 if __name__ == "__main__":
-    points = [(6, 537), (625, 287), (701, 220), (805, 222), (983, 346), (1082, 501), (1364, 701), (1775, 1024), (1845, 1078), (8, 1076)]
-    print(get_poly_area(points))
-    for f in os.listdir("data/3796/raw"):
+    parser = argparse.ArgumentParser(description="Segment images by masking a polygonal area.")
+    parser.add_argument("--input_folder", type=str, required=True, help="Path to the folder containing input images.")
+    parser.add_argument("--output_folder", type=str, required=True, help="Path to the folder containing output images.")
+    parser.add_argument("--points_json", type=str, required=True, help="Path to the JSON file containing polygon points.")
+
+    args = parser.parse_args()
+
+    input_folder = args.input_folder
+    output_folder = args.output_folder
+    points_json = args.points_json
+
+    # Load polygon points
+    with open(points_json, 'r') as file:
+        points = json.load(file)
+
+    print(f"Polygon Points: {points}")
+
+    # Process all images in the input folder
+    for f in os.listdir(input_folder):
         if f.endswith(".jpg"):
-            segment_img(3796, f"data/3796/raw/{f}", points)
-    segment_img(3796, "data/3796/raw/3796_20241210_184605.jpg", points)
+            segment_img(output_folder, f"{input_folder}/{f}", points)

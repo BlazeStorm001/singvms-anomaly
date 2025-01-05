@@ -2,6 +2,15 @@ import numpy as np
 from shapely.geometry import box
 from shapely.ops import unary_union
 
+def get_poly_area(points):
+    """Calculate the area of a polygon defined by a list of points."""
+    area = 0
+    for i in range(len(points)):
+        x1, y1 = points[i]
+        x2, y2 = points[(i + 1) % len(points)]
+        area += (x1 * y2) - (x2 * y1)
+    return abs(area) / 2
+
 def calculate_occupation_area_shapely(predictions, roi_area):
     """
     Calculate the occupation area of bounding boxes on an image using Shapely.
@@ -40,44 +49,3 @@ def calculate_occupation_area_shapely(predictions, roi_area):
     occupation_ratio = union_area / roi_area
 
     return occupation_ratio
-
-if __name__ == "__main__":
-    # Given prediction output as JSON
-    preds = { 
-        "predictions": [{
-            "x": 500.0,
-            "y": 500.0,
-            "width": 1000,
-            "height": 1000,
-            "class": "hand",
-            "confidence": 0.943
-        }, {
-            "x": 504.5,
-            "y": 363.0,
-            "width": 215,
-            "height": 172,
-            "class": "hand",
-            "confidence": 0.917
-        }, {
-            "x": 400,
-            "y": 400,
-            "width": 50,
-            "height": 52,
-            "class": "hand",
-            "confidence": 0.87
-        }, {
-            "x": 78.5,
-            "y": 700.0,
-            "width": 139,
-            "height": 34,
-            "class": "hand",
-            "confidence": 0.404
-        }]
-    }
-
-    # Assume the image is 2000x1000
-    image_width = 1000
-    image_height = 1000
-
-    occupation_ratio = calculate_occupation_area_shapely(preds, image_width, image_height)
-    print(f"Occupation Ratio: {occupation_ratio:.4f}")
