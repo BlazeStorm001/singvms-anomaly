@@ -1,6 +1,6 @@
 # Singapore Traffic Jam Detection Using Anomaly Detection
 
-![Traffic](data\3796\output\3796_20241211_190138.jpg)
+![Traffic](data/3796/output/3796_20241211_190138.jpg)
 
 This project includes Python scripts for detecting traffic jams using anomaly detection on live camera feed images from the Singapore Government's Traffic API. The YOLOv11 model is employed to count the number of vehicles in each image. Anomaly detection is then performed using the z-score method on features such as the occupation ratio and the vehicle count to identify traffic surges.
 
