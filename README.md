@@ -45,5 +45,6 @@ python prepare.py --json_directory "data/3796/json" --points_json "points.json" 
 ```
 
 ### 5. Detect anomalies using right tailed Z-threshold
-
+```
 python anomaly.py --file_path "3796_vehicle_data.csv" --significance_level 0.001
+```
