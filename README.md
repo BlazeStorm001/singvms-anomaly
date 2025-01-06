@@ -33,8 +33,9 @@ python segment.py --input_folder "data/3796/raw" --output_folder "data/3796/mask
 ```
 
 ### 3. Run inference on segmented images and save the predictions
+Obtain API key from [Roboflow](https://www.roboflow.com) and run:
 ```
-python inference.py --masked_dir "data/3796/masked" --output_dir "data/3796/output" --json_dir "data/3796/json" --api_key "M4k7un0DhO1ElBuNgY5i"
+python inference.py --masked_dir "data/3796/masked" --output_dir "data/3796/output" --json_dir "data/3796/json" --api_key "YOUR_ROBOFLOW_API_KEY"
 
 ```
 
